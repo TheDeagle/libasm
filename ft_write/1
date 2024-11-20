@@ -1,7 +1,0 @@
-#include <stdio.h>
-
-extern int ft_write(int fd, const char *msg, int length);
-
-int main(){
-	printf("%d\n", ft_write(2, "H
-}
