@@ -13,8 +13,8 @@ eq:
 
 neg:
 	mov al, [rdi]
-	mov ab, [rsi]
-	sub al, ab
+	mov bl, [rsi]
+	sub al, bl;
 	mov rax, al
 	ret
 
