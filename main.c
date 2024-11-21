@@ -43,15 +43,15 @@ int main(){
 		char str2[6] = "hhhhh";
 		char s1[6] = "abcde";
 		char s2[6] = "hhhhh";
-		printf("Theirs: %s\n", strcmp(s2, s1));  
-		printf("Mine: %s\n", ft_strcmp(str2, str1));
+		printf("Theirs: %d\n", strcmp(s2, s1));  
+		printf("Mine: %d\n", ft_strcmp(str2, str1));
 		char str3[6] = "abcde";
 		char str4[6] = "hhhhh";
 		char s3[6] = "abcde";
 		char s4[6] = "hhhhh";
 
-		printf("Theirs: %s\n", strcmp(s3 + 2, s4 + 1));  
-		printf("Mine: %s\n", ft_strcmp(str3 + 2, str4 + 1));
+		printf("Theirs: %d\n", strcmp(s3 + 2, s4 + 1));  
+		printf("Mine: %dgit \n", ft_strcmp(str3 + 2, str4 + 1));
 
 		printf("----------------------------\n");
 	}
