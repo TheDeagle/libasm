@@ -15,8 +15,8 @@ int main(){
 	{
 		printf("---------STRLEN CHECK-------\n");
 		char str[] = "hello world!";
-		printf("Theirs: %d\n", strlen(str));  
-		printf("Mine: %d\n", ft_strlen(str));
+		printf("Theirs: %zu\n", strlen(str));  
+		printf("Mine: %zu\n", ft_strlen(str));
 		printf("----------------------------\n");
 	}
 	{
@@ -51,7 +51,7 @@ int main(){
 		char s4[6] = "hhhhh";
 
 		printf("Theirs: %d\n", strcmp(s3 + 2, s4 + 1));  
-		printf("Mine: %dgit \n", ft_strcmp(str3 + 2, str4 + 1));
+		printf("Mine: %d\n", ft_strcmp(str3 + 2, str4 + 1));
 
 		printf("----------------------------\n");
 	}
