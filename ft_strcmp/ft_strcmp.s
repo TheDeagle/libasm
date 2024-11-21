@@ -2,9 +2,9 @@ section .text
 	global ft_strcmp
 
 ft_strcmp:
-	cmp rdi, rsi
-	jg pos
+	cmp [rdi], [rsi]	
 	jl neg
+	jg pos
 	je eq
 
 eq:
@@ -12,7 +12,10 @@ eq:
 	ret
 
 neg:
-	mov rax, -1
+	mov al, [rdi]
+	mov ab, [rsi]
+	sub al, ab
+	mov rax, al
 	ret
 
 pos:
