@@ -8,6 +8,7 @@ extern size_t ft_strlen(char *s);
 extern size_t ft_write(int fd, void *buf, size_t count);
 extern size_t ft_read(int fd, void *buf, size_t count);
 extern char *ft_strcpy(char *dst, char *src);
+extern int ft_strcmp(char *dst, char *src);
 extern char *ft_strdup(const char *s);
 
 
@@ -65,14 +66,14 @@ int main(){
 	int fd2 = open("test2.txt", O_CREAT | O_RDWR, 0644);
 	{
 		printf("---------WRITE CHECK-------\n");
-		prinft("Theirs: %ld (Their errno = %d) (check a file thats called test1.txt)\n", write(fd1, "hello world!", 12), errno);
-		prinft("Mine: %ld (Their errno = %d) (check a file thats called test2.txt)\n", ft_write(fd2, "hello world!", 12), errno);
+		printf("Theirs: %ld (Their errno = %d) (check a file thats called test1.txt)\n", write(fd1, "hello world!", 12), errno);
+		printf("Mine: %ld (Their errno = %d) (check a file thats called test2.txt)\n", ft_write(fd2, "hello world!", 12), errno);
 
-		prinft("Theirs: %ld (Their errno = %d) (check a file thats called test1.txt)\n", write(10, "hello world!", 12), errno);
-		prinft("Mine: %ld (Their errno = %d) (check a file thats called test2.txt)\n", ft_write(10, "hello world!", 12), errno);
+		printf("Theirs: %ld (Their errno = %d) (check a file thats called test1.txt)\n", write(10, "hello world!", 12), errno);
+		printf("Mine: %ld (Their errno = %d) (check a file thats called test2.txt)\n", ft_write(10, "hello world!", 12), errno);
 
-		prinft("Theirs: %ld (Their errno = %d) (check a file thats called test1.txt)\n", write(fd1, "hello world!", 0), errno);
-		prinft("Mine: %ld (Their errno = %d) (check a file thats called test2.txt)\n", ft_write(fd2, "hello world!", 0), errno);
+		printf("Theirs: %ld (Their errno = %d) (check a file thats called test1.txt)\n", write(fd1, "hello world!", 0), errno);
+		printf("Mine: %ld (Their errno = %d) (check a file thats called test2.txt)\n", ft_write(fd2, "hello world!", 0), errno);
 		printf("----------------------------\n");
 	}
 	{
