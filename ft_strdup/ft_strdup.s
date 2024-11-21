@@ -5,9 +5,10 @@ section .text
 	extern malloc
 
 ft_strdup:
-	call ft_strlen
 	push rdi
+	call ft_strlen
 	mov rdi, rax
+	add rdi, 1
 	call malloc
 	pop rbx
 	mov rdi, rax

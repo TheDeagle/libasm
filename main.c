@@ -34,5 +34,12 @@ int main(){
 		printf("Mine: %s\n", ft_strcpy(str3 + 2, str4 + 1));
 
 		printf("----------------------------\n");
-	}  
+	}
+	{
+		printf("---------STRCPY CHECK-------\n");
+		printf("Theirs: %s\n", strdup("hello world!"));
+		printf("Mine: %s\n", ft_strdup("hello world!"));
+		printf("----------------------------\n");
+	}
+	while(1); 
 }	
