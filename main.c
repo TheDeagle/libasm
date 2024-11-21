@@ -23,10 +23,15 @@ int main(){
 		char str2[6] = "hhhhh";
 		char s1[6] = "abcde";
 		char s2[6] = "hhhhh";
-		printf("Theirs: %s\n", strcpy(str2, str1));  
+		printf("Theirs: %s\n", strcpy(s2, s1));  
 		printf("Mine: %s\n", ft_strcpy(str2, str1));
+		char str3[6] = "abcde";
+		char str4[6] = "hhhhh";
+		char s3[6] = "abcde";
+		char s4[6] = "hhhhh";
 
-
+		printf("Theirs: %s\n", strcpy(s3 + 2, s4 + 1));  
+		printf("Mine: %s\n", ft_strcpy(str3 + 2, str4 + 1));
 
 		printf("----------------------------\n");
 	}  
