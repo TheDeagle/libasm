@@ -1,18 +1,15 @@
 section .text
-	global ft_strlen
+global ft_strlen
 
 ft_strlen:
 	xor rcx, rcx
-	
-	loop1 nop
-	cmp byte [rdi], 0x0
 
+loop:
+	cmp byte [rdi + rcx], 0
 	je done
 	inc rcx
-	inc rdi
-	jne loop1
+	jmp loop
 
 done:
 	mov rax, rcx
 	ret
-
