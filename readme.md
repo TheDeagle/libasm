@@ -41,3 +41,39 @@ Build mandatory library:
 
 ```bash
 make
+```
+
+Build bonus functions and run tests:
+
+```bash
+make bonus
+```
+
+Clean object files and build outputs:
+
+```bash
+make clean
+make fclean
+make re
+```
+
+---
+
+## Project Structure
+
+```text
+.
+├── mandatory/        → Mandatory NASM assembly sources
+├── bonus/            → Bonus NASM assembly sources
+├── obj/              → Compiled object files (.o)
+├── main.c            → Mandatory test suite
+├── bonus_main.c      → Bonus test suite
+├── Makefile          → Compilation rules
+└── README.md
+```
+
+---
+
+> No magic. Just registers, memory, syscalls, and a lot of `mov`.
+> 
+> **42 — Libasm**
