@@ -14,6 +14,7 @@ int     ft_list_size(t_list *begin_list);
 void    ft_list_sort(t_list **begin_list, int (*cmp)());
 void    ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *));
 int     ft_atoi_base(char *str, char *base);
+void    *ft_simd_memchr(const void *s, int c, size_t n);
 
 /* Standard library / libasm strcmp prototype for comparison */
 int     ft_strcmp(const char *s1, const char *s2);
@@ -65,6 +66,19 @@ static void check_atoi(const char *label, const char *str, const char *base, int
     print_result(buf, got == expected);
     if (got != expected)
         printf("        got %d, expected %d\n", got, expected);
+}
+
+/* Compare ft_simd_memchr result against libc memchr */
+static void check_memchr(const char *label, const void *s, int c, size_t n)
+{
+    void *got = ft_simd_memchr(s, c, n);
+    void *exp = memchr(s, c, n);
+    char buf[256];
+    snprintf(buf, sizeof(buf), "ft_simd_memchr(%s, '%c', %zu)",
+             label, (c >= 32 && c < 127) ? c : '?', n);
+    print_result(buf, got == exp);
+    if (got != exp)
+        printf("        got %p, expected %p\n", got, exp);
 }
 
 int main(void)
@@ -182,6 +196,65 @@ int main(void)
     check_atoi("NULL str",          NULL,       "0123456789", 0);
     check_atoi("empty str",         "",         "0123456789", 0);
     check_atoi("custom base",       "on",       "poneyvif",   10);
+
+    /* ==================== FT_SIMD_MEMCHR ==================== */
+    printf("\n---------------- ft_simd_memchr tests ------------------\n\n");
+
+    /* Use a buffer large enough that SIMD path kicks in */
+    char big[256];
+    for (size_t i = 0; i < sizeof(big); i++)
+        big[i] = (char)(i % 251);        /* avoid 0 to keep it simple */
+
+    /* 1. Basic: character present early */
+    check_memchr("big, 'A' at 65",     big, 'A', sizeof(big));
+
+    /* 2. Character only at a specific known position */
+    big[100] = 'X';
+    check_memchr("big, 'X' at 100",    big, 'X', sizeof(big));
+
+    /* 3. Character not present in range */
+    check_memchr("big, '\\0' in 50",    big, 0,   50);
+
+    /* 4. Search for a byte that isn't there */
+    check_memchr("big, '?' missing",    big, '?', sizeof(big));
+
+    /* 5. Small n, first byte matches */
+    check_memchr("small n=1 match",     big, big[0], 1);
+
+    /* 6. Small n, no match */
+    check_memchr("small n=5 nomatch",   big, 'Z', 5);
+
+    /* 7. Exactly 16 bytes */
+    check_memchr("exactly 16",          big, big[15], 16);
+
+    /* 8. Just over 16 bytes */
+    check_memchr("17 bytes",            big, big[16], 17);
+
+    /* 9. 32 bytes, match at last byte */
+    check_memchr("32 bytes, last byte", big, big[31], 32);
+
+    /* 10. 33 bytes, match at last byte */
+    check_memchr("33 bytes, last byte", big, big[32], 33);
+
+    /* 11. Null byte inside the buffer */
+    char withnull[64];
+    memset(withnull, 'a', sizeof(withnull));
+    withnull[40] = '\0';
+    check_memchr("null at 40",          withnull, '\0', sizeof(withnull));
+
+    /* 12. n = 0 must return NULL */
+    check_memchr("n = 0",               big, 'A', 0);
+
+    /* 13. All same byte, match at start */
+    char same[64];
+    memset(same, 'x', sizeof(same));
+    check_memchr("all 'x', search x",   same, 'x', sizeof(same));
+
+    /* 14. All same byte, search a different one */
+    check_memchr("all 'x', search y",   same, 'y', sizeof(same));
+
+    /* 15. Unaligned pointer */
+    check_memchr("unaligned ptr",       big + 1, big[7], 100);
 
     printf("\n============================================================\n");
 

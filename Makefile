@@ -32,6 +32,7 @@ bonus: fclean
 	@ $(NASM) $(NFLAGS) ./$(SRC_DIR)/ft_strcmp.s -o ./$(OBJ_DIR)/ft_strcmp.o
 	@ $(NASM) $(NFLAGS) ./$(BONUS_SRC_DIR)/ft_list_sort.s -o ./$(OBJ_DIR)/ft_list_sort.o
 	@ $(NASM) $(NFLAGS) ./$(BONUS_SRC_DIR)/ft_list_remove_if.s -o ./$(OBJ_DIR)/ft_list_remove_if.o
+	@ $(NASM) $(NFLAGS) ./$(BONUS_SRC_DIR)/ft_simd_memchr.s -o ./$(OBJ_DIR)/ft_simd_memchr.o
 	gcc bonus_main.c ./$(OBJ_DIR)/*.o -o  $(BONUS_NAME)
 	@ ./$(BONUS_NAME)
 

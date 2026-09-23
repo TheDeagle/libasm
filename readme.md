@@ -13,7 +13,6 @@ A small journey into x86-64 assembly — learning how C functions look when you 
 - `ft_write`
 - `ft_read`
 - `ft_strdup`
-- `ft_calloc`
 
 ### Bonus
 - `ft_atoi_base`
@@ -21,39 +20,24 @@ A small journey into x86-64 assembly — learning how C functions look when you 
 - `ft_list_size`
 - `ft_list_sort`
 - `ft_list_remove_if`
+- `ft_simd_memchr`
 
-Everything is written in **NASM, 64-bit, Intel syntax**.
+Everything is written in **NASM, 64-bit, Intel syntax** following the **System V AMD64 ABI**.
 
 ---
 
-## Build & run
+## Technical Details & Optimization
+
+- **Calling Conventions:** Arguments passed via standard register order (`RDI`, `RSI`, `RDX`, `RCX`, `R8`, `R9`).
+- **SIMD / SSE Support:** `ft_simd_memchr` utilizes 128-bit XMM registers (`movdqu`, `pcmpeqb`, `pmovmskb`, `bsf`) to scan 16 bytes per cycle.
+- **Syscall & Errno Handling:** `ft_write` and `ft_read` handle system calls directly via `syscall`, setting `__errno_location` on errors.
+- **Stack Alignment:** Strict 16-byte stack frame alignment maintained prior to calling external functions like `malloc` and `free`.
+
+---
+
+## Build & Run
+
+Build mandatory library:
 
 ```bash
 make
-```
-
-Build the bonus:
-
-```bash
-make bonus
-```
-
-The Makefile also runs the test program automatically after compilation.
-
----
-
-## Structure
-
-```text
-mandatory/    → mandatory assembly
-bonus/        → bonus assembly
-obj/          → generated object files
-main.c        → mandatory tests
-bonus_main.c  → bonus tests
-```
-
----
-
-> No magic. Just registers, memory, syscalls, and a lot of `mov`.
-> 
-> **42 — Libasm**
