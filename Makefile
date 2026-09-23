@@ -9,10 +9,8 @@ BONUS_SRC_DIR = bonus
 OBJ_DIR = obj
 
 SRC = ./$(SRC_DIR)/ft_strlen.s ./$(SRC_DIR)/ft_strcpy.s ./$(SRC_DIR)/ft_strcmp.s ./$(SRC_DIR)/ft_write.s ./$(SRC_DIR)/ft_read.s
-OBJ = $(SRC:.s=.o)
 
 BONUS_SRC = ./$(BONUS_SRC_DIR)/ft_list_push_front.s
-BONUS_OBJ = $(SRC:.s=.o)
 
 $(NAME): fclean
 	@ mkdir $(OBJ_DIR)
@@ -28,6 +26,7 @@ $(NAME): fclean
 
 bonus: fclean
 	@ mkdir $(OBJ_DIR)
+	@ $(NASM) $(NFLAGS) ./$(BONUS_SRC_DIR)/ft_atoi_base.s -o ./$(OBJ_DIR)/ft_atoi_base.o
 	@ $(NASM) $(NFLAGS) ./$(BONUS_SRC_DIR)/ft_list_push_front.s -o ./$(OBJ_DIR)/ft_list_push_front.o
 	@ $(NASM) $(NFLAGS) ./$(BONUS_SRC_DIR)/ft_list_size.s -o ./$(OBJ_DIR)/ft_list_size.o
 	@ $(NASM) $(NFLAGS) ./$(SRC_DIR)/ft_strcmp.s -o ./$(OBJ_DIR)/ft_strcmp.o

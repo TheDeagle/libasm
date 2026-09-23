@@ -8,10 +8,12 @@ typedef struct s_list {
 } t_list;
 
 /* Bonus prototypes */
+int     get_base_len(char *str);
 void    ft_list_push_front(t_list **begin_list, void *data);
 int     ft_list_size(t_list *begin_list);
 void    ft_list_sort(t_list **begin_list, int (*cmp)());
 void    ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *));
+int     ft_atoi_base(char *str, char *base);
 
 /* Standard library / libasm strcmp prototype for comparison */
 int     ft_strcmp(const char *s1, const char *s2);
@@ -54,20 +56,29 @@ void free_list_full(t_list *list)
     }
 }
 
+static void check_atoi(const char *label, const char *str, const char *base, int expected)
+{
+    int got = ft_atoi_base((char *)str, (char *)base);
+    char buf[128];
+    snprintf(buf, sizeof(buf), "ft_atoi_base(\"%s\", \"%s\") == %d",
+             str ? str : "(null)", base ? base : "(null)", expected);
+    print_result(buf, got == expected);
+    if (got != expected)
+        printf("        got %d, expected %d\n", got, expected);
+}
+
 int main(void)
 {
     printf("==================== LIBASM BONUS TESTS ====================\n\n");
 
     t_list *list = NULL;
 
-    /* ---------------- 1. FT_LIST_SIZE (EMPTY) ---------------- */
+    /* ---------------- FT_LIST_SIZE (EMPTY) ---------------- */
     int size_empty_ok = (ft_list_size(list) == 0);
     print_result("ft_list_size(NULL) == 0", size_empty_ok);
     printf("    Size = %d\n\n", ft_list_size(list));
 
-
-    /* ---------------- 2. FT_LIST_PUSH_FRONT ---------------- */
-    /* Pushing strings in reverse order so initial list will be unsorted */
+    /* ---------------- FT_LIST_PUSH_FRONT ---------------- */
     char *s1 = strdup("444");
     char *s2 = strdup("111");
     char *s3 = strdup("333");
@@ -78,7 +89,6 @@ int main(void)
     ft_list_push_front(&list, s2);
     ft_list_push_front(&list, s1);
 
-    /* Expected front-to-back: "444" -> "111" -> "333" -> "222" */
     int push_ok = (list != NULL &&
                    strcmp((char *)list->data, "444") == 0 &&
                    strcmp((char *)list->next->data, "111") == 0 &&
@@ -89,16 +99,14 @@ int main(void)
     print_list("Initial List", list);
     printf("\n");
 
-
-    /* ---------------- 3. FT_LIST_SIZE (POPULATED) ---------------- */
+    /* ---------------- FT_LIST_SIZE (POPULATED) ---------------- */
     int current_size = ft_list_size(list);
     int size_ok = (current_size == 4);
 
     print_result("ft_list_size(list) == 4", size_ok);
     printf("    Size = %d\n\n", current_size);
 
-
-    /* ---------------- 4. FT_LIST_SORT ---------------- */
+    /* ---------------- FT_LIST_SORT ---------------- */
     ft_list_sort(&list, (int (*)())ft_strcmp);
 
     int sort_ok = (list != NULL &&
@@ -111,10 +119,7 @@ int main(void)
     print_list("Sorted List", list);
     printf("\n");
 
-
-    /* ---------------- 5. FT_LIST_REMOVE_IF (MIDDLE NODE) ---------------- */
-    /* List is currently: ["111", "222", "333", "444"] */
-    /* Remove "333" (Middle node check) */
+    /* ---------------- FT_LIST_REMOVE_IF (MIDDLE) ---------------- */
     ft_list_remove_if(&list, "333", (int (*)())ft_strcmp, free);
 
     int remove_mid_ok = (ft_list_size(list) == 3 &&
@@ -126,10 +131,7 @@ int main(void)
     print_list("After Remove '333'", list);
     printf("\n");
 
-
-    /* ---------------- 6. FT_LIST_REMOVE_IF (HEAD NODE) ---------------- */
-    /* List is currently: ["111", "222", "444"] */
-    /* Remove "111" (Head node check) */
+    /* ---------------- FT_LIST_REMOVE_IF (HEAD) ---------------- */
     ft_list_remove_if(&list, "111", (int (*)())ft_strcmp, free);
 
     int remove_head_ok = (ft_list_size(list) == 2 &&
@@ -140,10 +142,7 @@ int main(void)
     print_list("After Remove '111'", list);
     printf("\n");
 
-
-    /* ---------------- 7. FT_LIST_REMOVE_IF (TAIL NODE) ---------------- */
-    /* List is currently: ["222", "444"] */
-    /* Remove "444" (Tail node check) */
+    /* ---------------- FT_LIST_REMOVE_IF (TAIL) ---------------- */
     ft_list_remove_if(&list, "444", (int (*)())ft_strcmp, free);
 
     int remove_tail_ok = (ft_list_size(list) == 1 &&
@@ -154,10 +153,7 @@ int main(void)
     print_list("After Remove '444'", list);
     printf("\n");
 
-
-    /* ---------------- 8. FT_LIST_REMOVE_IF (REMOVE LAST REMAINING) ---------------- */
-    /* List is currently: ["222"] */
-    /* Remove "222" (Empty list result check) */
+    /* ---------------- FT_LIST_REMOVE_IF (LAST) ---------------- */
     ft_list_remove_if(&list, "222", (int (*)())ft_strcmp, free);
 
     int remove_last_ok = (ft_list_size(list) == 0 && list == NULL);
@@ -166,10 +162,28 @@ int main(void)
     print_list("After Removing All", list);
     printf("\n");
 
-
-    /* Clean up any remaining list nodes safely */
     free_list_full(list);
 
-    printf("============================================================\n");
+    /* ==================== FT_ATOI_BASE ==================== */
+    printf("------------------ ft_atoi_base tests ------------------\n\n");
+
+    check_atoi("decimal",           "42",       "0123456789", 42);
+    check_atoi("negative",          "-42",      "0123456789", -42);
+    check_atoi("double minus",      "--42",     "0123456789", 42);
+    check_atoi("whitespace + sign", " \t\n -42","0123456789", -42);
+    check_atoi("binary",            "1010",     "01",         10);
+    check_atoi("hex",               "ff",       "0123456789abcdef", 255);
+    check_atoi("stops at invalid",  "42abc",    "0123456789", 42);
+    check_atoi("base too short",    "42",       "0",          0);
+    check_atoi("base has dup",      "42",       "00123",      0);
+    check_atoi("base has '+'",      "42",       "+0123",      0);
+    check_atoi("base has space",    "42",       " 0123",      0);
+    check_atoi("NULL base",         "42",       NULL,         0);
+    check_atoi("NULL str",          NULL,       "0123456789", 0);
+    check_atoi("empty str",         "",         "0123456789", 0);
+    check_atoi("custom base",       "on",       "poneyvif",   10);
+
+    printf("\n============================================================\n");
+
     return 0;
 }
