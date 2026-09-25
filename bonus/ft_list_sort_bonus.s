@@ -61,3 +61,4 @@ next_node:
 check_swapped:
     test r9, r9
     jnz restart
+    ret

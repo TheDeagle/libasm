@@ -13,6 +13,7 @@ A small journey into x86-64 assembly — learning how C functions look when you 
 - `ft_write`
 - `ft_read`
 - `ft_strdup`
+- `ft_calloc`
 
 ### Bonus
 - `ft_atoi_base`
@@ -22,7 +23,7 @@ A small journey into x86-64 assembly — learning how C functions look when you 
 - `ft_list_remove_if`
 - `ft_simd_memchr`
 
-Everything is written in **NASM, 64-bit, Intel syntax** following the **System V AMD64 ABI**.
+Everything is written in **NASM, 64-bit, Intel syntax** (`-f elf64`) following the **System V AMD64 ABI**.
 
 ---
 
@@ -37,16 +38,28 @@ Everything is written in **NASM, 64-bit, Intel syntax** following the **System V
 
 ## Build & Run
 
-Build mandatory library:
+Build mandatory library (`libasm.a`):
 
 ```bash
 make
 ```
 
-Build bonus functions and run tests:
+Build bonus library (`bonus_libasm.a`):
 
 ```bash
 make bonus
+```
+
+Run mandatory tests:
+
+```bash
+make test
+```
+
+Run bonus tests:
+
+```bash
+make test_bonus
 ```
 
 Clean object files and build outputs:

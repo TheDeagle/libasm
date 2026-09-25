@@ -1,0 +1,37 @@
+*.o
+/obj
+.gdb_history
+/test_bonus
+/test
+.DS_Store
+# Object files
+*.o
+/obj
+
+# Archives / libraries
+*.a
+
+# Test / demo binaries
+/test
+/test_main
+/test_bonus
+/libasm
+/bonus_libasm
+
+# Debugger
+.gdb_history
+
+# macOS
+.DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Compiled core dumps
+core
+core.*
+vgcore.*
